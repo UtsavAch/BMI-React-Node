@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function IMC() {
+  const navigate = useNavigate();
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [result, setResult] = useState(null);
@@ -8,7 +10,7 @@ function IMC() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:3000/calculate-imc", {
+    const response = await fetch("http://localhost:4000/calculate-imc", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ weight, height }),
@@ -21,6 +23,13 @@ function IMC() {
   return (
     <div>
       <h1>IMC Calculator</h1>
+      <button
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        Home
+      </button>
       <form onSubmit={handleSubmit}>
         <div>
           <label>

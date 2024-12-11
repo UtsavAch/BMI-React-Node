@@ -8,10 +8,6 @@ function App() {
   return (
     <Router>
       <div>
-        <nav>
-          <Link to="/">Home</Link> | <Link to="/calculator">Calculator</Link> |{" "}
-          <Link to="/imc">IMC</Link>
-        </nav>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/calculator" element={<Calculator />} />

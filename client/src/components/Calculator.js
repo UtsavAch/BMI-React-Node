@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Calculator() {
+  const navigate = useNavigate();
   const [display, setDisplay] = useState("0");
   const [currentInput, setCurrentInput] = useState("");
 
@@ -9,7 +11,7 @@ function Calculator() {
       setCurrentInput("");
       setDisplay("0");
     } else if (value === "=") {
-      const response = await fetch("http://localhost:3000/calculate", {
+      const response = await fetch("http://localhost:4000/calculate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ expression: currentInput }),
@@ -39,6 +41,13 @@ function Calculator() {
   return (
     <div>
       <h1>Calculator</h1>
+      <button
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        Home
+      </button>
       <div
         style={{ border: "1px solid black", width: "150px", padding: "10px" }}
       >
