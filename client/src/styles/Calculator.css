@@ -8,8 +8,10 @@
 }
 
 .calculator {
-  width: 350px;
+  width: 300px;
   margin: auto;
+  border: 1px solid orangered;
+  border-radius: 5px;
 }
 
 .calculator-input {

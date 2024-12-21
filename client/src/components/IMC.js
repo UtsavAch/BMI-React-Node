@@ -6,9 +6,15 @@ function IMC() {
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [result, setResult] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setResult(null);
+    setCategory(null);
+    setError(null);
 
     const response = await fetch("http://localhost:4000/calculate-imc", {
       method: "POST",
@@ -17,7 +23,12 @@ function IMC() {
     });
 
     const data = await response.json();
-    setResult(data.imc);
+    if (response.ok) {
+      setResult(data.imc);
+      setCategory(data.category);
+    } else {
+      setError(data.error);
+    }
   };
 
   return (
@@ -45,15 +56,31 @@ function IMC() {
             />
           </div>
         </div>
-        <button className="submit-button" type="submit-button">
+        <button className="submit-button" type="submit">
           Calculate IMC
         </button>
       </form>
-      {result && (
-        <p>
-          Your IMC: <strong>{result}</strong>
-        </p>
-      )}
+      <div className="imc-result">
+        <p className="imc-result-header">Result</p>
+        <div className="imc-result-info">
+          {error ? (
+            <p className="error-message">{error}</p>
+          ) : result ? (
+            <>
+              <p className="result-message">
+                IMC: <span>{result}</span>
+              </p>
+              <p className="result-message">
+                Category: <span>{category}</span>
+              </p>
+            </>
+          ) : (
+            <p className="info-message">
+              Provide your weight and height to calculate IMC
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
