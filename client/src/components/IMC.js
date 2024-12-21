@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import NavButton from "./NavButton";
 import "../styles/IMC.css";
 
 function IMC() {
-  const navigate = useNavigate();
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [result, setResult] = useState(null);
@@ -22,39 +21,33 @@ function IMC() {
   };
 
   return (
-    <div>
+    <div className="imc-container">
       <h1>IMC Calculator</h1>
-      <button
-        onClick={() => {
-          navigate("/");
-        }}
-      >
-        Home
-      </button>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Weight (kg):{" "}
+      <NavButton text="Home" target={"/"} />
+      <form className="imc-form" onSubmit={handleSubmit}>
+        <div className="form-input-container">
+          <div className="form-input">
+            <span>Weight in kg: </span>
             <input
               type="number"
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
               required
             />
-          </label>
-        </div>
-        <div>
-          <label>
-            Height (m):{" "}
+          </div>
+          <div className="form-input">
+            <span> Height in cm: </span>
             <input
               type="number"
               value={height}
               onChange={(e) => setHeight(e.target.value)}
               required
             />
-          </label>
+          </div>
         </div>
-        <button type="submit">Calculate</button>
+        <button className="submit-button" type="submit-button">
+          Calculate IMC
+        </button>
       </form>
       {result && (
         <p>

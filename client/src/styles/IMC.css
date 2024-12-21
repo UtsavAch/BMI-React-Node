@@ -1,0 +1,41 @@
+.imc-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+.imc-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-input-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.form-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-input input {
+  margin-top: 5px;
+  padding: 10px 20px;
+}
+
+.submit-button {
+  width: fit-content;
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: orangered;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
