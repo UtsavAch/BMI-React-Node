@@ -1,73 +1,124 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import "../styles/Calculator.css";
+import NavButton from "./NavButton";
 
 function Calculator() {
-  const navigate = useNavigate();
-  const [display, setDisplay] = useState("0");
-  const [currentInput, setCurrentInput] = useState("");
+  const [input, setInput] = useState("");
 
-  const handleButtonClick = async (value) => {
-    if (value === "C") {
-      setCurrentInput("");
-      setDisplay("0");
-    } else if (value === "=") {
-      const response = await fetch("http://localhost:4000/calculate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ expression: currentInput }),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        setDisplay(result.result);
-      } else {
-        setDisplay("Error");
-      }
-    } else {
-      const updatedInput = currentInput + value;
-      setCurrentInput(updatedInput);
-      setDisplay(updatedInput);
+  const calculateResult = () => {
+    try {
+      const result = evaluateExpression(input);
+      setInput(result.toString());
+    } catch {
+      setInput("Error");
     }
   };
 
+  const evaluateExpression = (expression) => {
+    const tokens = expression.match(/(\d+(\.\d+)?|[+\-*/])/g);
+    if (!tokens) throw new Error("Invalid expression");
+
+    const numbers = [];
+    const operators = [];
+
+    const precedence = (op) => (op === "+" || op === "-" ? 1 : 2);
+
+    const applyOperation = () => {
+      const b = numbers.pop();
+      const a = numbers.pop();
+      const op = operators.pop();
+      switch (op) {
+        case "+":
+          return numbers.push(a + b);
+        case "-":
+          return numbers.push(a - b);
+        case "*":
+          return numbers.push(a * b);
+        case "/":
+          return numbers.push(a / b);
+        default:
+          throw new Error("Unknown operator");
+      }
+    };
+
+    tokens.forEach((token) => {
+      if (!isNaN(parseFloat(token))) {
+        numbers.push(parseFloat(token));
+      } else {
+        while (
+          operators.length &&
+          precedence(operators[operators.length - 1]) >= precedence(token)
+        ) {
+          applyOperation();
+        }
+        operators.push(token);
+      }
+    });
+
+    while (operators.length) {
+      applyOperation();
+    }
+
+    return numbers[0];
+  };
+
+  const handleClick = (value) => {
+    if (value === "=") {
+      calculateResult();
+    } else {
+      setInput(input + value);
+    }
+  };
+
+  const resetCalculator = () => {
+    setInput("");
+  };
+
   const buttons = [
-    ["1", "2", "3", "+"],
-    ["4", "5", "6", "-"],
-    ["7", "8", "9", "*"],
-    ["0", "C", "=", "/"],
+    "7",
+    "8",
+    "9",
+    "/",
+    "4",
+    "5",
+    "6",
+    "*",
+    "1",
+    "2",
+    "3",
+    "-",
+    "0",
+    ".",
+    "=",
+    "+",
   ];
 
   return (
-    <div>
+    <div className="calculator-container">
       <h1>Calculator</h1>
-      <button
-        onClick={() => {
-          navigate("/");
-        }}
-      >
-        Home
-      </button>
-      <div
-        style={{ border: "1px solid black", width: "150px", padding: "10px" }}
-      >
-        <div id="display" style={{ marginBottom: "10px" }}>
-          {display}
+      <NavButton text="Home" target="/" />
+      <div className="calculator">
+        <input
+          type="text"
+          value={input}
+          readOnly
+          className="calculator-input"
+        />
+        <div className="calculator-grid">
+          {buttons.map((button, index) => (
+            <button
+              key={index}
+              onClick={() => handleClick(button)}
+              className="calculator-button"
+            >
+              {button}
+            </button>
+          ))}
         </div>
-        {buttons.map((row, rowIndex) => (
-          <div key={rowIndex}>
-            {row.map((button) => (
-              <button
-                key={button}
-                onClick={() => handleButtonClick(button)}
-                style={{ width: "30px", margin: "5px" }}
-              >
-                {button}
-              </button>
-            ))}
-          </div>
-        ))}
       </div>
+      <button onClick={resetCalculator} className="reset-button">
+        Reset
+      </button>
     </div>
   );
 }

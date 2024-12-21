@@ -22,18 +22,6 @@ app.post("/calculate-imc", (req, res) => {
   res.json({ imc });
 });
 
-//To calculate math expressions
-app.post("/calculate", (req, res) => {
-  const { expression } = req.body;
-
-  if (!expression) {
-    return res.status(400).json({ error: "No expression provided" });
-  }
-
-  const result = eval(expression);
-  res.json({ result: result.toString() });
-});
-
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });

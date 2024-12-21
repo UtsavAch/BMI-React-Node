@@ -1,26 +1,15 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import "../styles/Home.css";
+import NavButton from "../components/NavButton";
 
 function HomePage() {
-  const navigate = useNavigate();
-
   return (
-    <div>
+    <div className="home-container">
       <h1>Home</h1>
-      <button
-        onClick={() => {
-          navigate("/calculator");
-        }}
-      >
-        Calculator
-      </button>
-      <button
-        onClick={() => {
-          navigate("/imc");
-        }}
-      >
-        IMC
-      </button>
+      <div className="nav-container">
+        <NavButton text="Calculator" target="/calculator" />
+        <NavButton text="IMC" target="/imc" />
+      </div>
     </div>
   );
 }

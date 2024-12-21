@@ -1,0 +1,10 @@
+.home-container {
+  text-align: center;
+  margin: 20px;
+}
+
+.nav-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
